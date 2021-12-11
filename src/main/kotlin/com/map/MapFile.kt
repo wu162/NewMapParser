@@ -1,8 +1,10 @@
-import util.IMapStreamReader
-import util.log
+package com.map
+
+import com.map.asset.Asset
+import com.map.asset.AssetDescItem
 import java.lang.Exception
 
-private const val TAG = "MapFile"
+private const val TAG = "com.map.MapFile"
 
 class MapFile(private val reader: IMapStreamReader) {
 

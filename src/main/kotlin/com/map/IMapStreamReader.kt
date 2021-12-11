@@ -1,4 +1,4 @@
-package util
+package com.map
 
 import java.io.ByteArrayInputStream
 

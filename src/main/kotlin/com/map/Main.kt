@@ -1,4 +1,4 @@
-import util.MapStreamReader
+package com.map
 
 fun main() {
     val stream = uncompressIfNeeded("./files/hard choice(new).map")

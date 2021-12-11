@@ -1,4 +1,5 @@
-import util.*
+package com.map
+
 import java.io.BufferedInputStream
 import java.io.FileInputStream
 import java.lang.Exception
@@ -36,7 +37,7 @@ fun uncompressIfNeeded(path: String): IMemoryStream {
             }
         }
     }
-    throw Exception("uncompress exception")
+    throw Exception("com.map.uncompress exception")
 }
 
 fun uncompress(bufferStream: BufferedInputStream, uncompressedSize: Long): IMemoryStream {
@@ -76,7 +77,7 @@ fun ExecuteStopCommand(bufferStream: BufferedInputStream, memoryStream: MemorySt
 }
 
 fun Execute1ByteCommand(bufferStream: BufferedInputStream, memoryStream: MemoryStream, byte1: Int) {
-//    log("Execute1ByteCommand"," ${((byte1 and 0x1F) + 1) shl 2}")
+//    log("com.map.Execute1ByteCommand"," ${((byte1 and 0x1F) + 1) shl 2}")
     bufferStream.write(memoryStream,((byte1 and 0x1F) + 1) shl 2)
 }
 
@@ -89,7 +90,7 @@ fun Execute4ByteCommand(bufferStream: BufferedInputStream, memoryStream: MemoryS
     val referencedDataLength = (((byte1 and 0x0C) shr 2) shl 8) + byte4 + 5
     val referencedDataDistance = (((byte1 and 0x10) shr 4) shl 16) + (byte2 shl 8) + byte3 + 1
 
-//    log("Execute4ByteCommand"," ${byte1 and 0x03}  |  $referencedDataLength  | $referencedDataDistance")
+//    log("com.map.Execute4ByteCommand"," ${byte1 and 0x03}  |  $referencedDataLength  | $referencedDataDistance")
     memoryStream.selfCopy(referencedDataDistance, referencedDataLength)
 
 }
@@ -102,7 +103,7 @@ fun Execute3ByteCommand(bufferStream: BufferedInputStream, memoryStream: MemoryS
     val referencedDataLength = (byte1 and 0x3F) + 4
     val referencedDataDistance = ((byte2 and 0x3F) shl 8) + byte3 + 1
 
-//    log("Execute3ByteCommand"," ${byte2 shr 6} | $referencedDataLength | $referencedDataDistance")
+//    log("com.map.Execute3ByteCommand"," ${byte2 shr 6} | $referencedDataLength | $referencedDataDistance")
     memoryStream.selfCopy( referencedDataDistance, referencedDataLength)
 }
 
@@ -113,7 +114,7 @@ fun Execute2ByteCommand(bufferStream: BufferedInputStream, memoryStream: MemoryS
     val referencedDataLength = ((byte1 and 0x1C) shr 2) + 3
     val referencedDataDistance = ((byte1 and 0x60) shl 3) + byte2 + 1
 
-//    log("Execute2ByteCommand","$byte1 | $byte2 | ${byte1 and 0x03} | $referencedDataLength | $referencedDataDistance")
+//    log("com.map.Execute2ByteCommand","$byte1 | $byte2 | ${byte1 and 0x03} | $referencedDataLength | $referencedDataDistance")
 
     memoryStream.selfCopy(referencedDataDistance, referencedDataLength)
 
