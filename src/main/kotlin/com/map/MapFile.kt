@@ -2,13 +2,15 @@ package com.map
 
 import com.map.asset.Asset
 import com.map.asset.AssetDescItem
+import com.map.asset.PlayerScriptsList
+import com.map.asset.Teams
 import java.lang.Exception
 
 private const val TAG = "com.map.MapFile"
 
 class MapFile(private val reader: IMapStreamReader) {
 
-    private val indexNameMap = mutableMapOf<Int, String>()
+    val indexNameMap = mutableMapOf<Int, String>()
     private val assets  = mutableListOf<Asset>()
 
     fun parse() {
@@ -26,18 +28,30 @@ class MapFile(private val reader: IMapStreamReader) {
             indexNameMap[assetDescItem.index.toInt()] = assetDescItem.name
         }
         log(TAG, getDescStr(assetDescList))
+        parseAsset()
+        log(TAG, "assetDescList size: ${assetDescList.size} | assets size: ${assets.size}")
+    }
+
+    private fun parseAsset() {
         while (reader.hasMore()) {
             val index = reader.readUInt32Le().toInt()
-            val version = reader.readUInt16Le()
-            val size = reader.readUInt32Le()
-            val data = reader.readBytes(size.toInt())
             if (indexNameMap.containsKey(index)) {
-                assets.add(Asset(index, indexNameMap[index]!!, data))
+                val name = indexNameMap[index]!!
+                when (name) {
+                    "Teams" -> {
+                        assets.add(Teams().let { it.parse(index, reader, this);it })
+                    }
+                    "PlayerScriptsList" -> {
+                        assets.add(PlayerScriptsList().let { it.parse(index, reader, this);it })
+                    }
+                    else -> {
+                        assets.add(Asset().let { it.parse(index, reader, this);it })
+                    }
+                }
             } else {
                 throw Exception("invalid asset index")
             }
         }
-        log(TAG, "assetDescList size: ${assetDescList.size} | assets size: ${assets.size}")
     }
 
     private fun getDescStr(assetDescList: MutableList<AssetDescItem>): String {
@@ -47,5 +61,4 @@ class MapFile(private val reader: IMapStreamReader) {
         }
         return res
     }
-
 }
