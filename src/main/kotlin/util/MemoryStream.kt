@@ -15,6 +15,8 @@ interface IMemoryStream : Closeable {
     fun size(): Int
 
     fun selfCopy(distance: Int, length: Int)
+
+    fun getAllBytes(): ByteArray
 }
 
 open class MemoryStream(private val size: Int) : IMemoryStream {
@@ -96,6 +98,10 @@ open class MemoryStream(private val size: Int) : IMemoryStream {
             e.printStackTrace()
             System.exit(-1)
         }
+    }
+
+    override fun getAllBytes(): ByteArray {
+        return buf
     }
 
     override fun close() {
