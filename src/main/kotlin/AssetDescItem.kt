@@ -1,6 +1,5 @@
 class AssetDescItem(
-    private val length:  Int,
-    var content: String,
-    var index: Long
+    var name: String,
+    var index: Int
 ) {
 }

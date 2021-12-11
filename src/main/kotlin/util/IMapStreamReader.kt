@@ -11,6 +11,8 @@ interface IMapStreamReader {
     fun readUInt16Le(): Int
 
     fun readBytes(count: Int): ByteArray
+
+    fun hasMore(): Boolean
 }
 
 class MapStreamReader(bytes: ByteArray): IMapStreamReader {
@@ -33,6 +35,10 @@ class MapStreamReader(bytes: ByteArray): IMapStreamReader {
         var buf = ByteArray(count)
         stream.read(buf)
         return buf
+    }
+
+    override fun hasMore(): Boolean {
+        return stream.available() > 0
     }
 
 }
