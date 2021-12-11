@@ -1,0 +1,5 @@
+class MapFile {
+    fun parse() {
+
+    }
+}
